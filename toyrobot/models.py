@@ -3,7 +3,7 @@ from enum import Enum
 from typing import List, Optional
 
 
-class Direction(Enum):
+class Direction(str, Enum):
     NORTH = "NORTH"
     EAST = "EAST"
     WEST = "WEST"
@@ -42,6 +42,7 @@ class Robot:
                 self.direction = Direction.NORTH
             case Direction.SOUTH:
                 self.direction = Direction.WEST
+
 
 class Board:
     def __init__(self, rows=5, cols=5):
