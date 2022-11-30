@@ -159,4 +159,19 @@ comply with the spec. First, the test:
 The solution that I chose is to implement a `reset` method on the `Board` class that does what its name implies: reset
 the board state back to empty. I then call this reset method before placing a robot.
 
+## Handle invalid placements
+
+The `PLACE` command doesn't take into account the board size, so a placement of `9,9,N` will be deemed valid. A simple
+check in the `place` method could work, but I decided to also raise an `InvalidPlacementException` that will be handled
+by the client class to make it more robust.
+
 ## Implement a proper game loop
+
+The game is good as is in terms of spec compliance as it can ingest a stream of commands and produce the necessary
+output. I decided it's worth implementing the final script as an interactive terminal. For this to work, I need to
+augment the existing testcases and implement a new `EXIT` command. This essentially allows my existing testcases to
+not be stuck in an infinite loop as we're now waiting for an EOF or a KeyboardInterrupt to terminate the terminal.
+
+## HELP command
+
+To round it up, I decided to implement a `HELP` command that displays all the supported commands.

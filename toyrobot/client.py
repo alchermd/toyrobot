@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from toyrobot.errors import InvalidCommandException
 from toyrobot.parsers import Parser, CommandParser
@@ -18,12 +19,15 @@ class ConsoleClient(Client):
         self.sanitizer = sanitizer if sanitizer is not None else CommandSanitizer()
 
     def start(self):
-        raw_input = input(">>> ")
-        commands = self.sanitizer.sanitize_raw_input(raw_input)
+        try:
+            while raw_input := input():
+                commands = self.sanitizer.sanitize_raw_input(raw_input)
 
-        for command in commands:
-            try:
-                if out := self.parser.parse(command):
-                    print(out)
-            except InvalidCommandException as e:
-                logger.error(e)
+                for command in commands:
+                    try:
+                        if out := self.parser.parse(command):
+                            print(out)
+                    except InvalidCommandException as e:
+                        logger.error(e)
+        except (EOFError, KeyboardInterrupt):
+            logger.info("Exiting game...")

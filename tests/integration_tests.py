@@ -12,6 +12,7 @@ class ConsoleClientTestCase(unittest.TestCase):
                     "PLACE 0,0,NORTH",
                     "MOVE",
                     "REPORT",
+                    "EXIT",
                 ],
                 ["Output: 0,1,NORTH"],
             ),
@@ -20,6 +21,7 @@ class ConsoleClientTestCase(unittest.TestCase):
                     "PLACE 0,0,NORTH",
                     "LEFT",
                     "REPORT",
+                    "EXIT",
                 ],
                 ["Output: 0,0,WEST"],
             ),
@@ -31,6 +33,7 @@ class ConsoleClientTestCase(unittest.TestCase):
                     "LEFT",
                     "MOVE",
                     "REPORT",
+                    "EXIT",
                 ],
                 ["Output: 3,3,NORTH"],
             ),
@@ -41,6 +44,7 @@ class ConsoleClientTestCase(unittest.TestCase):
                     "  LEFT ",
                     "   MOVE",
                     "REPORT   ",
+                    "EXIT",
                 ],
                 ["Output: 2,1,EAST"],
             ),
@@ -53,6 +57,7 @@ class ConsoleClientTestCase(unittest.TestCase):
                     "REPORT",
                     "MOVE",
                     "REPORT",
+                    "EXIT",
                 ],
                 ["Output: 4,4,NORTH", "Output: 4,4,NORTH"],
             ),
@@ -61,6 +66,7 @@ class ConsoleClientTestCase(unittest.TestCase):
                     "PLACE 2,2,N",
                     "MOVE",
                     "REPORT",
+                    "EXIT",
                 ],
                 ["Output: 2,3,NORTH"],
             ),
@@ -69,6 +75,7 @@ class ConsoleClientTestCase(unittest.TestCase):
                     "PLACE 2,2,E",
                     "MOVE",
                     "REPORT",
+                    "EXIT",
                 ],
                 ["Output: 3,2,EAST"],
             ),
@@ -77,6 +84,7 @@ class ConsoleClientTestCase(unittest.TestCase):
                     "PLACE 2,2,W",
                     "MOVE",
                     "REPORT",
+                    "EXIT",
                 ],
                 ["Output: 1,2,WEST"],
             ),
@@ -85,6 +93,7 @@ class ConsoleClientTestCase(unittest.TestCase):
                     "PLACE 2,2,S",
                     "MOVE",
                     "REPORT",
+                    "EXIT",
                 ],
                 ["Output: 2,1,SOUTH"],
             ),
@@ -95,6 +104,7 @@ class ConsoleClientTestCase(unittest.TestCase):
                     "PLACE 2,2,S",
                     "MOVE",
                     "REPORT",
+                    "EXIT",
                 ],
                 ["Output: 2,1,SOUTH"],
             ),
@@ -112,6 +122,7 @@ class ConsoleClientTestCase(unittest.TestCase):
                     "PLACE 2,2,N",
                     "MOVE",
                     "REPORT",
+                    "EXIT",
                 ],
                 ["Output: 2,3,NORTH"],
             ),
@@ -122,6 +133,7 @@ class ConsoleClientTestCase(unittest.TestCase):
                     "PLACE 2,2,N",
                     "MOVE",
                     "REPORT",
+                    "EXIT",
                 ],
                 ["Output: 2,3,NORTH"],
             ),
@@ -134,6 +146,7 @@ class ConsoleClientTestCase(unittest.TestCase):
                     "REPORT",
                     "PLACE 0,0,W",
                     "REPORT",
+                    "EXIT",
                 ],
                 ["Output: 2,3,NORTH", "Output: 0,0,WEST"],
             ),
@@ -142,7 +155,7 @@ class ConsoleClientTestCase(unittest.TestCase):
     def test_can_process_commands_with_expected_results(self):
         for commands, expected_output in self.commands:
             received_output = []
-            toyrobot.client.input = lambda _: "\n".join(commands)
+            toyrobot.client.input = lambda: "\n".join(commands)
             toyrobot.client.print = lambda s: received_output.append(s)
             client = toyrobot.client.ConsoleClient()
             client.start()

@@ -3,7 +3,7 @@ from enum import Enum
 from typing import List, Optional
 
 from toyrobot.errors import SouthOutOfBoundException, NorthOutOfBoundException, \
-    WestOutOfBoundException, EastOutOfBoundException
+    WestOutOfBoundException, EastOutOfBoundException, InvalidPlacementException
 
 
 class Direction(str, Enum):
@@ -55,6 +55,9 @@ class Board:
         self.squares: List[Optional[Robot]] = [None for _ in range(rows * cols)]
 
     def place(self, robot: Robot, x: int, y: int, f: Direction):
+        if x >= self.cols or y >= self.rows:
+            raise InvalidPlacementException
+
         self.reset()
         robot.direction = f
         self.squares[y * self.cols + x] = robot

@@ -1,7 +1,8 @@
 import logging
 import re
 
-from toyrobot.errors import OutOfBoundMovementException, UnparsableCommandException, InvalidCommandException
+from toyrobot.errors import OutOfBoundMovementException, UnparsableCommandException, InvalidCommandException, \
+    InvalidPlacementException
 from toyrobot.models import Board, Robot, Coordinates
 
 logger = logging.getLogger(__file__)
@@ -18,9 +19,39 @@ class CommandParser(Parser):
         self.robot = robot if robot is not None else Robot()
 
         self.commands = []
+        self.help_text = """
+PLACE x,y,f
+    Places the robot in the x,y coordinate while facing the f direction. 
+    x and y must fall between 0-4.
+    f must be one of the following values: NORTH, N, EAST, E, WEST, W, SOUTH, S 
+    
+MOVE
+    Moves the robot one space towards the direction it's facing. 
+    Move commands that makes the robot fall out of the table are ignored.
+    
+LEFT
+    Rotates the robot 90 degrees to its left, relative to the direction it's facing.
+    
+RIGHT
+    Rotates the robot 90 degrees to its right, relative to the direction it's facing. 
+    
+REPORT
+    Display's the robot's current coordinates and the direction it's facing.
+    
+EXIT
+    Quits the application.
+    
+HELP
+    Shows the available commands.
+    
+Commands are case-insensitive. Unknown and invalid commands are ignored.
+
+---
+
+"""
 
     def parse(self, command: str):
-        if match := re.search(r"PLACE (\d),(\d),(NORTH|EAST|WEST|SOUTH|N|E|W|S)", command):
+        if match := re.search(r"PLACE (\d+),(\d+),(NORTH|EAST|WEST|SOUTH|N|E|W|S)", command):
             x = int(match.group(1))
             y = int(match.group(2))
             f = match.group(3)
@@ -34,9 +65,15 @@ class CommandParser(Parser):
                     f = "WEST"
                 case "S":
                     f = "SOUTH"
-
-            self.commands.append(match.group())
-            return self.board.place(self.robot, x, y, f)
+            try:
+                self.commands.append(match.group())
+                return self.board.place(self.robot, x, y, f)
+            except InvalidPlacementException:
+                raise InvalidCommandException
+        elif command == "EXIT":
+            raise EOFError
+        elif command == "HELP":
+            return self.help_text
         elif not self.place_command_executed:
             raise InvalidCommandException
 

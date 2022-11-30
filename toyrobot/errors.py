@@ -24,3 +24,7 @@ class InvalidCommandException(Exception):
 
 class UnparsableCommandException(InvalidCommandException):
     pass
+
+
+class InvalidPlacementException(Exception):
+    pass

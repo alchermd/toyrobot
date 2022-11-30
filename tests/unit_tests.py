@@ -2,7 +2,7 @@ import unittest
 from typing import Tuple, List
 
 from toyrobot.errors import SouthOutOfBoundException, WestOutOfBoundException, EastOutOfBoundException, \
-    NorthOutOfBoundException, OutOfBoundMovementException
+    NorthOutOfBoundException, OutOfBoundMovementException, InvalidPlacementException
 from toyrobot.models import Board, Robot, Direction, Coordinates
 
 
@@ -158,3 +158,9 @@ class OutOfBoundMovementsTestCase(unittest.TestCase):
             board.place(robot, x=coordinate.x, y=coordinate.y, f=coordinate.f)
             with self.assertRaises(exception):
                 board.move(robot)
+
+    def test_invalid_placement(self):
+        board = Board()
+        robot = Robot()
+        with self.assertRaises(InvalidPlacementException):
+            board.place(robot, 10, 10, Direction.NORTH)
