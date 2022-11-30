@@ -1,5 +1,9 @@
+from toyrobot.client import ConsoleClient
+
+
 def main():
-    raise NotImplementedError("TODO: Implement me!")
+    client = ConsoleClient()
+    client.start()
 
 
 if __name__ == "__main__":
