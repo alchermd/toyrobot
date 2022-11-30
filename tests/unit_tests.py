@@ -1,5 +1,8 @@
 import unittest
+from typing import Tuple, List
 
+from toyrobot.errors import SouthOutOfBoundException, WestOutOfBoundException, EastOutOfBoundException, \
+    NorthOutOfBoundException, OutOfBoundMovementException
 from toyrobot.models import Board, Robot, Direction, Coordinates
 
 
@@ -118,5 +121,40 @@ class TurningTestCase(unittest.TestCase):
         self.assertEqual(Coordinates(1, 2, Direction.WEST), board.report())
 
 
-if __name__ == "__main__":
-    unittest.main()
+class OutOfBoundMovementsTestCase(unittest.TestCase):
+    def setUp(self):
+        self.moves: List[Tuple[Coordinates, OutOfBoundMovementException]] = [
+            # First row
+            (Coordinates(0, 0, Direction.SOUTH), SouthOutOfBoundException),
+            (Coordinates(0, 0, Direction.WEST), WestOutOfBoundException),
+            (Coordinates(1, 0, Direction.SOUTH), SouthOutOfBoundException),
+            (Coordinates(2, 0, Direction.SOUTH), SouthOutOfBoundException),
+            (Coordinates(3, 0, Direction.SOUTH), SouthOutOfBoundException),
+            (Coordinates(4, 0, Direction.SOUTH), SouthOutOfBoundException),
+            (Coordinates(4, 0, Direction.EAST), EastOutOfBoundException),
+            # Second row
+            (Coordinates(0, 1, Direction.WEST), WestOutOfBoundException),
+            (Coordinates(4, 1, Direction.EAST), EastOutOfBoundException),
+            # Third row
+            (Coordinates(0, 2, Direction.WEST), WestOutOfBoundException),
+            (Coordinates(4, 2, Direction.EAST), EastOutOfBoundException),
+            # Fourth row
+            (Coordinates(0, 3, Direction.WEST), WestOutOfBoundException),
+            (Coordinates(4, 3, Direction.EAST), EastOutOfBoundException),
+            # Fifth row
+            (Coordinates(0, 4, Direction.NORTH), NorthOutOfBoundException),
+            (Coordinates(0, 4, Direction.WEST), WestOutOfBoundException),
+            (Coordinates(1, 4, Direction.NORTH), NorthOutOfBoundException),
+            (Coordinates(2, 4, Direction.NORTH), NorthOutOfBoundException),
+            (Coordinates(3, 4, Direction.NORTH), NorthOutOfBoundException),
+            (Coordinates(4, 4, Direction.NORTH), NorthOutOfBoundException),
+            (Coordinates(4, 4, Direction.EAST), EastOutOfBoundException),
+        ]
+
+    def test_moving_out_of_bounds_raises_an_exception(self):
+        for coordinate, exception in self.moves:
+            board = Board()
+            robot = Robot()
+            board.place(robot, x=coordinate.x, y=coordinate.y, f=coordinate.f)
+            with self.assertRaises(exception):
+                board.move(robot)

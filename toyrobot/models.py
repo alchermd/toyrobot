@@ -2,6 +2,9 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import List, Optional
 
+from toyrobot.errors import SouthOutOfBoundException, NorthOutOfBoundException, \
+    WestOutOfBoundException, EastOutOfBoundException
+
 
 class Direction(str, Enum):
     NORTH = "NORTH"
@@ -63,10 +66,23 @@ class Board:
                 return Coordinates(x, y, square.direction)
 
     def move(self, robot: Robot):
-        for i, square in enumerate(self.squares):
+        for current_index, square in enumerate(self.squares):
             if square is robot:
-                self.squares[i] = None
-                self.squares[i + self._get_offset(robot.direction)] = robot
+                target_index = current_index + self._get_offset(robot.direction)
+                if robot.direction == Direction.SOUTH and target_index < 0:
+                    raise SouthOutOfBoundException
+
+                if robot.direction == Direction.NORTH and target_index >= len(self.squares):
+                    raise NorthOutOfBoundException
+
+                if robot.direction == Direction.WEST and current_index % self.cols == 0:
+                    raise WestOutOfBoundException
+
+                if robot.direction == Direction.EAST and (current_index + 1) % self.cols == 0:
+                    raise EastOutOfBoundException
+
+                self.squares[current_index] = None
+                self.squares[target_index] = robot
                 break
 
     def _get_offset(self, direction: Direction) -> int:
