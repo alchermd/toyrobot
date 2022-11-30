@@ -125,6 +125,18 @@ class ConsoleClientTestCase(unittest.TestCase):
                 ],
                 ["Output: 2,3,NORTH"],
             ),
+            (
+                [
+                    "PLACE 1,4,W",
+                    "PLACE 0,0,W",
+                    "PLACE 2,2,N",
+                    "MOVE",
+                    "REPORT",
+                    "PLACE 0,0,W",
+                    "REPORT",
+                ],
+                ["Output: 2,3,NORTH", "Output: 0,0,WEST"],
+            ),
         ]
 
     def test_can_process_commands_with_expected_results(self):

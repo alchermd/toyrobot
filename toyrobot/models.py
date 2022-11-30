@@ -55,8 +55,12 @@ class Board:
         self.squares: List[Optional[Robot]] = [None for _ in range(rows * cols)]
 
     def place(self, robot: Robot, x: int, y: int, f: Direction):
+        self.reset()
         robot.direction = f
         self.squares[y * self.cols + x] = robot
+
+    def reset(self):
+        self.squares: List[Optional[Robot]] = [None for _ in range(self.rows * self.cols)]
 
     def report(self) -> Coordinates:
         for i, square in enumerate(self.squares):

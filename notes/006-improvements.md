@@ -136,4 +136,27 @@ To handle these scenarios, I created two new Exceptions: an `InvalidCommandExcep
 an `UnparsableCommandException` that inherits from the former. These are then handled by the client class, in which the
 errors are logged to stderr.
 
+## Handle multiple PLACE commands
+
+At this point, the code allows individual robots to be placed independent of each other. We can restrict this logic to
+comply with the spec. First, the test:
+
+```python
+(
+    [
+        "PLACE 1,4,W",
+        "PLACE 0,0,W",
+        "PLACE 2,2,N",
+        "MOVE",
+        "REPORT",
+        "PLACE 0,0,W",
+        "REPORT",
+    ],
+    ["Output: 2,3,NORTH", "Output: 0,0,WEST"],
+),
+```
+
+The solution that I chose is to implement a `reset` method on the `Board` class that does what its name implies: reset
+the board state back to empty. I then call this reset method before placing a robot.
+
 ## Implement a proper game loop
