@@ -21,8 +21,8 @@ class Coordinates:
 
 
 class Robot:
-    def __init__(self):
-        self.direction = Direction.NORTH
+    def __init__(self, direction=Direction.NORTH):
+        self.direction = direction
 
     def turn_left(self):
         match self.direction:
