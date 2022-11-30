@@ -16,3 +16,11 @@ class WestOutOfBoundException(OutOfBoundMovementException):
 
 class SouthOutOfBoundException(OutOfBoundMovementException):
     pass
+
+
+class InvalidCommandException(Exception):
+    pass
+
+
+class UnparsableCommandException(InvalidCommandException):
+    pass

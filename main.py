@@ -1,4 +1,8 @@
+import logging
+
 from toyrobot.client import ConsoleClient
+
+logging.disable(logging.CRITICAL)
 
 
 def main():

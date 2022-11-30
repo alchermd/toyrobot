@@ -88,4 +88,52 @@ We'll also start with new tests:
 
 The solution is to augment the regex capture group into `(NORTH|EAST|WEST|SOUTH|N|E|W|S)`.
 
+## Ignore invalid commands as well as those that occur before a PLACE command is issued
+
+Starting with tests:
+
+```python
+(
+    [
+        "MOVE",
+        "REPORT",
+        "PLACE 2,2,S",
+        "MOVE",
+        "REPORT",
+    ],
+    ["Output: 2,1,SOUTH"],
+),
+(
+    [
+        "REPORT",
+        "REPORT",
+        "MOVE",
+        "MOVE",
+        "MOVE",
+        "REPORT",
+        "REPORT",
+        "MOVE",
+        "REPORT",
+        "PLACE 2,2,N",
+        "MOVE",
+        "REPORT",
+    ],
+    ["Output: 2,3,NORTH"],
+),
+(
+    [
+        "FOO",
+        "BAR",
+        "PLACE 2,2,N",
+        "MOVE",
+        "REPORT",
+    ],
+    ["Output: 2,3,NORTH"],
+),
+```
+
+To handle these scenarios, I created two new Exceptions: an `InvalidCommandException` and
+an `UnparsableCommandException` that inherits from the former. These are then handled by the client class, in which the
+errors are logged to stderr.
+
 ## Implement a proper game loop

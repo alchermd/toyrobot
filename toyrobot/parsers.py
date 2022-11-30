@@ -1,7 +1,7 @@
 import logging
 import re
 
-from toyrobot.errors import OutOfBoundMovementException
+from toyrobot.errors import OutOfBoundMovementException, UnparsableCommandException, InvalidCommandException
 from toyrobot.models import Board, Robot, Coordinates
 
 logger = logging.getLogger(__file__)
@@ -17,20 +17,10 @@ class CommandParser(Parser):
         self.board = board if board is not None else Board()
         self.robot = robot if robot is not None else Robot()
 
+        self.commands = []
+
     def parse(self, command: str):
-        if command == "REPORT":
-            coordinates = self.board.report()
-            return self.parse_coordinates(coordinates)
-        elif command == "MOVE":
-            try:
-                self.board.move(self.robot)
-            except OutOfBoundMovementException as e:
-                logger.error(e)
-        elif command == "LEFT":
-            self.robot.turn_left()
-        elif command == "RIGHT":
-            self.robot.turn_right()
-        elif match := re.search(r"PLACE (\d),(\d),(NORTH|EAST|WEST|SOUTH|N|E|W|S)", command):
+        if match := re.search(r"PLACE (\d),(\d),(NORTH|EAST|WEST|SOUTH|N|E|W|S)", command):
             x = int(match.group(1))
             y = int(match.group(2))
             f = match.group(3)
@@ -45,10 +35,30 @@ class CommandParser(Parser):
                 case "S":
                     f = "SOUTH"
 
-            self.board.place(self.robot, x, y, f)
-        else:
-            return ""
+            self.commands.append(match.group())
+            return self.board.place(self.robot, x, y, f)
+        elif not self.place_command_executed:
+            raise InvalidCommandException
+
+        if command == "REPORT":
+            coordinates = self.board.report()
+            return self.parse_coordinates(coordinates)
+        elif command == "MOVE":
+            try:
+                return self.board.move(self.robot)
+            except OutOfBoundMovementException as e:
+                logger.error(e)
+        elif command == "LEFT":
+            return self.robot.turn_left()
+        elif command == "RIGHT":
+            return self.robot.turn_right()
+
+        raise UnparsableCommandException
 
     @staticmethod
-    def parse_coordinates(coordinates: Coordinates):
+    def parse_coordinates(coordinates: Coordinates) -> str:
         return f"Output: {coordinates.x},{coordinates.y},{coordinates.f}"
+
+    @property
+    def place_command_executed(self) -> bool:
+        return bool(list(filter(lambda command: command.startswith("PLACE"), self.commands)))

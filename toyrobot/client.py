@@ -1,5 +1,10 @@
+import logging
+
+from toyrobot.errors import InvalidCommandException
 from toyrobot.parsers import Parser, CommandParser
 from toyrobot.sanitizers import Sanitizer, CommandSanitizer
+
+logger = logging.getLogger(__file__)
 
 
 class Client:
@@ -17,5 +22,8 @@ class ConsoleClient(Client):
         commands = self.sanitizer.sanitize_raw_input(raw_input)
 
         for command in commands:
-            if out := self.parser.parse(command):
-                print(out)
+            try:
+                if out := self.parser.parse(command):
+                    print(out)
+            except InvalidCommandException as e:
+                logger.error(e)
