@@ -1,6 +1,10 @@
+import logging
 import re
 
+from toyrobot.errors import OutOfBoundMovementException
 from toyrobot.models import Board, Robot, Coordinates
+
+logger = logging.getLogger(__file__)
 
 
 class Parser:
@@ -18,7 +22,10 @@ class CommandParser(Parser):
             coordinates = self.board.report()
             return self.parse_coordinates(coordinates)
         elif command == "MOVE":
-            self.board.move(self.robot)
+            try:
+                self.board.move(self.robot)
+            except OutOfBoundMovementException as e:
+                logger.error(e)
         elif command == "LEFT":
             self.robot.turn_left()
         elif command == "RIGHT":

@@ -27,6 +27,26 @@ also added whitespace to the non-`PLACE` commands to make sure our updated sanit
 
 ## Handle moving out of bounds
 
+Let's add a new entry on the test table:
+
+```python
+(
+    [
+        "PLACE 4,3,SOUTH",
+        "RIGHT",
+        "RIGHT",
+        "MOVE",
+        "REPORT",
+        "MOVE",
+        "REPORT",
+    ],
+    ["Output: 4,4,NORTH", "Output: 4,4,NORTH"],
+),
+```
+
+The test would fail because it will raise an `OutOfBoundMovementException` on the last `MOVE` command. The obvious fix
+is to wrap the `.move` call inside a try-except block. For now, I just logged the error to stderr.
+
 ## Allow shorthand directions
 
 ## Implement a proper game loop

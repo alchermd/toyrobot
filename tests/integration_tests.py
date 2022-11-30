@@ -44,6 +44,18 @@ class ConsoleClientTestCase(unittest.TestCase):
                 ],
                 ["Output: 2,1,EAST"],
             ),
+            (
+                [
+                    "PLACE 4,3,SOUTH",
+                    "RIGHT",
+                    "RIGHT",
+                    "MOVE",
+                    "REPORT",
+                    "MOVE",
+                    "REPORT",
+                ],
+                ["Output: 4,4,NORTH", "Output: 4,4,NORTH"],
+            ),
         ]
 
     def test_can_process_commands_with_expected_results(self):
