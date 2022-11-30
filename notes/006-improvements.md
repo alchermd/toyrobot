@@ -7,6 +7,24 @@ Default instances are also provided as to allow changing of parsers/sanitizers o
 
 ## Update sanitation of the PLACE command
 
+Let's add a new entry on the test table:
+
+```python
+(
+    [
+        "PLACE       1,2,SOUTH     ",
+        "MOVE   ",
+        "  LEFT ",
+        "   MOVE",
+        "REPORT   ",
+    ],
+    ["Output: 2,1,EAST"],
+),
+```
+
+The logic is now encapsulated nicely in the `Sanitizer` class due to the refactor in the previous step. Note that we
+also added whitespace to the non-`PLACE` commands to make sure our updated sanitation works properly.
+
 ## Handle moving out of bounds
 
 ## Allow shorthand directions
