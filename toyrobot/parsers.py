@@ -30,10 +30,20 @@ class CommandParser(Parser):
             self.robot.turn_left()
         elif command == "RIGHT":
             self.robot.turn_right()
-        elif match := re.search(r"PLACE (\d),(\d),(NORTH|EAST|WEST|SOUTH)", command):
+        elif match := re.search(r"PLACE (\d),(\d),(NORTH|EAST|WEST|SOUTH|N|E|W|S)", command):
             x = int(match.group(1))
             y = int(match.group(2))
             f = match.group(3)
+
+            match f:
+                case "N":
+                    f = "NORTH"
+                case "E":
+                    f = "EAST"
+                case "W":
+                    f = "WEST"
+                case "S":
+                    f = "SOUTH"
 
             self.board.place(self.robot, x, y, f)
         else:

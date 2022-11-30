@@ -49,4 +49,43 @@ is to wrap the `.move` call inside a try-except block. For now, I just logged th
 
 ## Allow shorthand directions
 
+We'll also start with new tests:
+
+```python
+(
+    [
+        "PLACE 2,2,N",
+        "MOVE",
+        "REPORT",
+    ],
+    ["Output: 2,3,NORTH"],
+),
+(
+    [
+        "PLACE 2,2,E",
+        "MOVE",
+        "REPORT",
+    ],
+    ["Output: 3,2,EAST"],
+),
+(
+    [
+        "PLACE 2,2,W",
+        "MOVE",
+        "REPORT",
+    ],
+    ["Output: 1,2,WEST"],
+),
+(
+    [
+        "PLACE 2,2,S",
+        "MOVE",
+        "REPORT",
+    ],
+    ["Output: 2,1,SOUTH"],
+),
+```
+
+The solution is to augment the regex capture group into `(NORTH|EAST|WEST|SOUTH|N|E|W|S)`.
+
 ## Implement a proper game loop
