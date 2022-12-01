@@ -30,7 +30,7 @@ The test suite can be run via `python runtests.py`.
 ## Usage
 
 Running the `main.py` script will start the app in interactive mode. An example `infile` containing the test commands
-from the instruction PDF is provided. It that can be piped to the main script. For example:
+from the instruction PDF is provided. It then can be piped to the main script. For example:
 
 ```console
 $ cat infile | python main.py > outfile
