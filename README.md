@@ -24,7 +24,8 @@ $ pip install -r requirements.txt
 $ python main.py
 ```
 
-The test suite can be ran via `python runtests.py`
+Note that I've used the [pattern matching feature](https://peps.python.org/pep-0634/), which requires `>=python3.10`.
+The test suite can be run via `python runtests.py`.
 
 ## Usage
 
