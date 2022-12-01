@@ -1,5 +1,7 @@
 # toyrobot
 
+![](./notes/toyrobot.gif)
+
 J.A. Doloiras' submission for the Toy Robot Code Challenge as part of his application for iress.
 
 ## Setup (with Docker)
