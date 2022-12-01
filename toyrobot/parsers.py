@@ -39,7 +39,9 @@ REPORT
     Display's the robot's current coordinates and the direction it's facing.
     
 EXIT
-    Quits the application.
+    Quits the application. 
+    Detecting EOF from the input stream will quit the application.
+    A keyboard interrupt (CTRL+D / CTRL+C) will also quit the application.
     
 HELP
     Shows the available commands.
