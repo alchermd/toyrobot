@@ -55,6 +55,9 @@ class Board:
         self.squares: List[Optional[Robot]] = [None for _ in range(rows * cols)]
 
     def place(self, robot: Robot, x: int, y: int, f: Direction):
+        """
+        Places a given robot into the board within the given coordinates.
+        """
         if x >= self.cols or y >= self.rows:
             raise InvalidPlacementException
 
@@ -63,9 +66,15 @@ class Board:
         self.squares[y * self.cols + x] = robot
 
     def reset(self):
+        """
+        Reset's the board to its initial empty state.
+        """
         self.squares: List[Optional[Robot]] = [None for _ in range(self.rows * self.cols)]
 
-    def report(self) -> Coordinates:
+    def report(self) -> Optional[Coordinates]:
+        """
+        Returns the coordinate of the first robot found.
+        """
         for i, square in enumerate(self.squares):
             if square is not None:
                 x = i % self.cols
@@ -73,6 +82,10 @@ class Board:
                 return Coordinates(x, y, square.direction)
 
     def move(self, robot: Robot):
+        """
+        Moves the given robot one square forward the direction it's facing.
+        If the robot hasn't been placed yet, this method has no effect.
+        """
         for current_index, square in enumerate(self.squares):
             if square is robot:
                 target_index = current_index + self._get_offset(robot.direction)
@@ -93,6 +106,9 @@ class Board:
                 break
 
     def _get_offset(self, direction: Direction) -> int:
+        """
+        Determines how many steps backward/forward a direction goes with respect to the board being a 1D list.
+        """
         match direction:
             case Direction.WEST:
                 return -1

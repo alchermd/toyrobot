@@ -1,5 +1,4 @@
 import logging
-import sys
 
 from toyrobot.errors import InvalidCommandException
 from toyrobot.parsers import Parser, CommandParser
@@ -9,16 +8,31 @@ logger = logging.getLogger(__file__)
 
 
 class Client:
+    """
+    Base client class, intended to host logic for the frontend of the application.
+    """
+
     def start(self):
+        """
+        Starts the client.
+        """
         raise NotImplementedError
 
 
 class ConsoleClient(Client):
+    """
+    A client that consumes and produces output in and out of stdin/stdout.
+    """
+
     def __init__(self, parser: Parser = None, sanitizer: Sanitizer = None):
         self.parser = parser if parser is not None else CommandParser()
         self.sanitizer = sanitizer if sanitizer is not None else CommandSanitizer()
 
     def start(self):
+        """
+        Continuously consumes input from stdin until an EOF or KeyboardInterrupt is detected.
+        Parser output is directed to stdout.
+        """
         try:
             while raw_input := input():
                 commands = self.sanitizer.sanitize_raw_input(raw_input)

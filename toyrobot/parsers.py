@@ -1,5 +1,6 @@
 import logging
 import re
+from typing import Optional
 
 from toyrobot.errors import OutOfBoundMovementException, UnparsableCommandException, InvalidCommandException, \
     InvalidPlacementException
@@ -9,11 +10,25 @@ logger = logging.getLogger(__file__)
 
 
 class Parser:
+    """
+    Base parser class, intended to host the logic for parsing commands.
+    """
+
     def parse(self, command: str):
+        """
+        Parses the given command.
+        """
         raise NotImplementedError
 
 
 class CommandParser(Parser):
+    """
+    Basic parser implementation.
+    It essentially runs pattern matching on a command and invokes the appropriate robot/board method.
+    It currently stores in-memory the running list of commands for the purpose of PLACE command prerequisites, which
+    could be extended to flushing the commands on disk for serialization/deserialization.
+    """
+
     def __init__(self, board: Board = None, robot: Robot = None):
         self.board = board if board is not None else Board()
         self.robot = robot if robot is not None else Robot()
@@ -52,7 +67,10 @@ Commands are case-insensitive. Unknown and invalid commands are ignored.
 
 """
 
-    def parse(self, command: str):
+    def parse(self, command: str) -> Optional[str]:
+        """
+        Parses the given command.
+        """
         if match := re.search(r"PLACE (\d+),(\d+),(NORTH|EAST|WEST|SOUTH|N|E|W|S)", command):
             x = int(match.group(1))
             y = int(match.group(2))
@@ -96,8 +114,14 @@ Commands are case-insensitive. Unknown and invalid commands are ignored.
 
     @staticmethod
     def parse_coordinates(coordinates: Coordinates) -> str:
+        """
+        String representation of the given coordinate.
+        """
         return f"Output: {coordinates.x},{coordinates.y},{coordinates.f}"
 
     @property
     def place_command_executed(self) -> bool:
+        """
+        Determines if a PLACE command has already been executed.
+        """
         return bool(list(filter(lambda command: command.startswith("PLACE"), self.commands)))
