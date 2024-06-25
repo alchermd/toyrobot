@@ -37,6 +37,8 @@ class CommandParser(Parser):
 
         self.commands = []
         self.help_text = """
+---
+
 PLACE x,y,f
     Places the robot in the x,y coordinate while facing the f direction. 
     x and y must fall between 0-4.
