@@ -36,7 +36,8 @@ class ConsoleClient(Client):
         Parser output is directed to stdout.
         """
         try:
-            while raw_input := input():
+            while True:
+                raw_input = input()
                 commands = self.sanitizer.sanitize_raw_input(raw_input)
 
                 for command in commands:
