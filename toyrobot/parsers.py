@@ -1,3 +1,4 @@
+import abc
 import logging
 import re
 from typing import Optional
@@ -6,7 +7,7 @@ from toyrobot.errors import OutOfBoundMovementException, UnparsableCommandExcept
     InvalidPlacementException
 from toyrobot.models import Board, Robot, Coordinates
 
-logger = logging.getLogger(__file__)
+logger = logging.getLogger(__name__)
 
 
 class Parser:
@@ -14,6 +15,7 @@ class Parser:
     Base parser class, intended to host the logic for parsing commands.
     """
 
+    @abc.abstractmethod
     def parse(self, command: str):
         """
         Parses the given command.

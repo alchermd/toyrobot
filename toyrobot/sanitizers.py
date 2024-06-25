@@ -1,3 +1,4 @@
+import abc
 from typing import List
 
 
@@ -6,6 +7,7 @@ class Sanitizer:
     Base Sanitizer class, intended to host the logic for cleaning up raw user input.
     """
 
+    @abc.abstractmethod
     def sanitize_raw_input(self, raw_input: str) -> List[str]:
         """
         Sanitizes the given raw input string.

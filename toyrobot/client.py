@@ -1,10 +1,11 @@
+import abc
 import logging
 
 from toyrobot.errors import InvalidCommandException
 from toyrobot.parsers import Parser, CommandParser
 from toyrobot.sanitizers import Sanitizer, CommandSanitizer
 
-logger = logging.getLogger(__file__)
+logger = logging.getLogger(__name__)
 
 
 class Client:
@@ -12,6 +13,7 @@ class Client:
     Base client class, intended to host logic for the frontend of the application.
     """
 
+    @abc.abstractmethod
     def start(self):
         """
         Starts the client.

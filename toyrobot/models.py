@@ -12,6 +12,9 @@ class Direction(str, Enum):
     WEST = "WEST"
     SOUTH = "SOUTH"
 
+    def __str__(self):
+        return self.value
+
 
 @dataclass(frozen=True)
 class Coordinates:

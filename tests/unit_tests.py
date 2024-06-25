@@ -1,8 +1,14 @@
 import unittest
 from typing import Tuple, List
 
-from toyrobot.errors import SouthOutOfBoundException, WestOutOfBoundException, EastOutOfBoundException, \
-    NorthOutOfBoundException, OutOfBoundMovementException, InvalidPlacementException
+from toyrobot.errors import (
+    SouthOutOfBoundException,
+    WestOutOfBoundException,
+    EastOutOfBoundException,
+    NorthOutOfBoundException,
+    OutOfBoundMovementException,
+    InvalidPlacementException,
+)
 from toyrobot.models import Board, Robot, Direction, Coordinates
 
 
